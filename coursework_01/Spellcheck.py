@@ -6,16 +6,36 @@ while(var > 2 or var < 0):
 	var = int(input())
 while(var != 0):
 	if(var == 1):
-		sentence = input("PLease input the sentence: ")
-		print(sentence)
-		break
+		sentence = input("Please input the sentence: ")
 	elif(var == 2):
 		filePath = input("Please enter the file name: ")
-		if(os.path.isfile(filePath)):
-			sentence = open(filePath, 'r')
-			print(sentence.read())
-			sentence.close()
+		while(os.path.isfile(filePath)):
+			sentence = open(filePath, 'r').read()
 			break
 		else:
 			print("Invalid path. Try again!")
+			continue
+	sep = " "
+	word = ""
+	alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	dictionary = open('EnglishWords.txt')
+	for letter in sentence:
+		alphabetPos = 0
+		while(letter != sep):
+			while(letter != alphabet[alphabetPos]):
+				alphabetPos += 1
+				if(alphabetPos == 52):
+					break
+			#if(letter != sep):
+				#if(alphabetPos == 52):
+					#continue
+			if(letter.upper()):
+				letter = letter.lower()
+			word = word + letter
+			print(word)
+			break
+		else:
+			break
+	#sentence.close()
+	break
 print("Program terminated!")
