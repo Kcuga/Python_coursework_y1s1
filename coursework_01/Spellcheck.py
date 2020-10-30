@@ -12,7 +12,9 @@ while(var != 0):
 	elif(var == 2):
 		filePath = input("Please enter the file name: ")
 		while(os.path.isfile(filePath)):
-			sentence = open(filePath, 'r').read()
+			fileOpen = open(filePath)
+			sentence = fileOpen.read()
+			fileOpen.close()
 			break
 		else:
 			print("Invalid path. Try again!")
@@ -73,6 +75,7 @@ while(var != 0):
 						wordAdded += 1
 						print("Word added to dictionary. Please open 'EnglishWords.txt' and save the file in order for the changes to take effect")
 					else:
+						print("Let me think for a moment...")
 						score0 = float(round(0,1))
 						for line in wordList:
 							score1 = SequenceMatcher(None, line, word).ratio()
@@ -123,6 +126,7 @@ while(var != 0):
 				wordAdded += 1
 				print("Word added to dictionary. Please open 'EnglishWords.txt' and save the file in order for the changes to take effect")
 			else:
+				print("Let me think for a moment...")
 				score0 = float(round(0,1))
 				for line in wordList:
 					score1 = SequenceMatcher(None, line, word).ratio()
