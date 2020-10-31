@@ -2,13 +2,13 @@
 
 #--- Importing ---
 
-import os.path, time
+import os.path, time, sys
 from datetime import datetime
 from difflib import SequenceMatcher
 
 #--- Main Menu ---
 
-print("\nPress 1 if you want to spell check a sentence.", "\nPress 2 if you want to spell check a file.", "\nPress 0 if you want to quit the program.")
+print("\nPress 1 if you want to spell check a sentence.\nPress 2 if you want to spell check a file.\nPress 0 if you want to quit the program.")
 print("-------------------------------------------------")
 var = int(input())
 while(var > 2 or var < 0):
@@ -72,7 +72,7 @@ while(var != 0):
 			ok = 0
 			for line in wordList:											#|
 				if word in line:											#|
-					if(len(word)+1 == len(line)):							#| THe word previously created is checked to see if it corresponds to any word from the list
+					if(len(word)+1 == len(line)):							#| The word previously created is checked to see if it corresponds to any word from the list
 						ok = 1												#|
 						correct += 1										#|
 						sentenceNew = sentenceNew + word + " "				# If so, the word is recorded
@@ -81,7 +81,7 @@ while(var != 0):
 			#--- Misspelling menu ---
 
 			if(ok == 0):
-				print("'" + word + "'" + " is not a word!", "\n\nWhat would you like to do?", "\n1.Ignore", "\n2.Mark", "\n3.Add to dictionary", "\n4.Suggest likely correct spelling")
+				print("'" + word + "'" + " is not a word!\n\nWhat would you like to do?\n 1.Ignore\n 2.Mark\n 3.Add to dictionary\n 4.Suggest likely correct spelling")
 				decision = int(input())
 				while(decision < 1 and decision > 4):
 					print("Invalid entry. Try again!")
@@ -123,7 +123,7 @@ while(var != 0):
 								correct += 1								#|
 								wordAccepted += 1
 							else:
-								print("Word not replaced.")					#| Not replacing the word
+								print("Word not replaced.\n")				#| Not replacing the word
 								incorrect += 1
 							sentenceNew = sentenceNew + word + " "
 						else:
@@ -143,7 +143,7 @@ while(var != 0):
 				sentenceNew = sentenceNew + word
 				break
 	if(ok == 0):
-		print(word + " is not a word!", "\n\nWhat would you like to do?", "\n1.Ignore", "\n2.Mark", "\n3.Add to dictionary", "\n4.Suggest likely correct spelling")
+		print(word + " is not a word!\n\nWhat would you like to do?\n  1.Ignore\n  2.Mark\n  3.Add to dictionary\n  4.Suggest likely correct spelling")
 		decision = int(input())
 		while(decision < 1 and decision > 4):
 			print("Invalid entry. Try again!")
@@ -179,7 +179,7 @@ while(var != 0):
 						correct += 1
 						wordAccepted += 1
 					else:
-						print("Word not replaced.")
+						print("Word not replaced.\n")
 						incorrect += 1
 				else:
 					print("No suggestion available!")
@@ -226,6 +226,23 @@ while(var != 0):
 	print("The number of words added to dictionary is: " + str(wordAdded) + ".")
 	print("The number of words changed by the user is: " + str(wordAccepted) + ".")
 	print("The date and time the input was spellchecked was:  " + str(timeStart) + ".")
-	print("The amount of time elapsed to spellcheck the input is: " + str(float(round(t1,4))) + " seconds.")
-	break
+	print("The amount of time elapsed to spellcheck the input is: " + str(float(round(t1,4))) + " seconds.\n")
+	
+	#--- Option to return to the menu or terminate the program ---
+
+	print("What would you like to do?\n 1. Go to main menu\n 2. Quit\n")
+	mainMenu = int(input())
+	while(mainMenu != 1 and mainMenu != 2):
+			print("Invalid entry. Try again!")
+			mainMenu = int(input())
+	if(mainMenu == 2):
+		print("\nProgram terminated!\n")
+		sys.exit()
+	elif(mainMenu == 1):
+		print("\nPress 1 if you want to spell check a sentence.", "\nPress 2 if you want to spell check a file.", "\nPress 0 if you want to quit the program.")
+		print("-------------------------------------------------")
+		var = int(input())
+		while(var > 2 or var < 0):
+			print("Invalid entry. Try again!")
+			var = int(input())
 print("\nProgram terminated!\n")
