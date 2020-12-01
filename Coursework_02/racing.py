@@ -1,6 +1,70 @@
 from tkinter import *
 from time import *
 
+def PlayButton():
+	road.delete(Welcome)
+	play.destroy()
+	leaderboard.destroy()
+	controls.destroy()
+	quit.destroy()
+
+	CarSeletion = road.create_text(800,300, fill="white",font=("arial", 75), text="Choose your car!")
+
+	photoGreen = PhotoImage(file="car_green.png")
+	carGreen = Button(road, image=photoGreen, height=200, width=99)
+	carGreen.image = photoGreen
+	carGreen_window = road.create_window(500,630, window=carGreen)
+
+	photoOrange = PhotoImage(file="car_orange.png")
+	carOrange = Button(road, image=photoOrange, height=200, width=99)
+	carOrange.image = photoOrange
+	carOrange_window = road.create_window(700,630, window=carOrange) 
+
+	photoPurple = PhotoImage(file="car_purple.png")
+	carPurple = Button(road, image=photoPurple, height=200, width=99)
+	carPurple.image = photoPurple
+	carPurple_window = road.create_window(900,630, window=carPurple) 
+
+	photoRed = PhotoImage(file="car_red.png")
+	carRed = Button(road, image=photoRed, height=200, width=99)
+	carRed.image = photoRed
+	carRed_window = road.create_window(1100,630, window=carRed)  
+
+	#Game()
+
+#def LeaderboardButton():
+
+#def ControlsButton():
+
+
+def QuitButton():
+	root.destroy()
+
+
+def Game():
+	lane = []
+	x=314
+	y=0
+	sizex=30
+	sizey=100
+	for i in range (4):
+		for j in range(5):
+			lane.append(road.create_rectangle(x, y, x+sizex, y+sizey, fill="white"))
+			y += 200
+		x += 314
+		y = 0
+	road.create_rectangle(0,0,30,900,fill="white")
+	road.create_rectangle(1570,0,1600,900,fill="white")
+	
+	while True:
+		for i in range(len(lane)):
+			pos = road.coords(lane[i])
+			if pos[1] > 900:
+				road.coords(lane[i], pos[0], -100, pos[2], 0)
+			road.move(lane[i],0,1)
+		sleep (0.002)
+		road.update()
+
 #def mainMenu():
 	#NA_menu = Frame(root, width=800, height=640, bg="red")
 	#NA_menu.pack(side="top", fill="both", expand=True)
@@ -29,54 +93,38 @@ from time import *
 	#NA_menu.pack(fill="both", expand=1)
 
 
-root = Tk()
-root.title("Input title here")
+root = Tk()  
+root.title("🄽🄴🄴🄳   🄵🄾🅁   🅂🄿🄴🄴🄳")
 root.geometry("1600x900")
 
-#Background
 road = Canvas(root, width=1600, height=900)
 road.pack()
 
 road.config(bg="Black")
 
-lane = []
-x=314
-y=0
-sizex=30
-sizey=100
-for i in range (4):
-	for j in range(5):
-		lane.append(road.create_rectangle(x, y, x+sizex, y+sizey, fill="white"))
-		y += 200
-	x += 314
-	y = 0
-road.create_rectangle(0,0,30,900,fill="white")
-road.create_rectangle(1570,0,1600,900,fill="white")
+#----Main Menu---
 
-while True:
-	for i in range(len(lane)):
-		pos = road.coords(lane[i])
-		if pos[1] > 900:
-			road.coords(lane[i], pos[0], -100, pos[2], 0)
-		road.move(lane[i],0,1)
-	sleep (0.002)
-	road.update()
+Welcome = road.create_text(800,150, fill="white",font=("arial", 75), text="Welcome to my game!")
 
-#lane = road.create_rectangle(0, 800, 30, 900, fill="white")
-#lane = road.create_rectangle(314, 800, 344, 900, fill="white")
-#lane = road.create_rectangle(628, 800, 658, 900, fill="white")
-#lane = road.create_rectangle(942, 800, 972, 900, fill="white")
-#lane = road.create_rectangle(1256, 800, 1286, 900, fill="white")
-#lane = road.create_rectangle(1570, 800, 1600, 900, fill="white")
+play = Button(road, text="Play", font=("arial", 25), command=PlayButton)
+play.configure(width = 10, relief = FLAT)
+road.create_window(800, 350, window=play)
 
-#lane = road.create_rectangle(0, 600, 30, 700, fill="white")
-#lane = road.create_rectangle(0, 400, 30, 500, fill="white")
-#lane = road.create_rectangle(0, 200, 30, 300, fill="white")
-#lane = road.create_rectangle(0, 0, 30, 100, fill="white")
-#lane.pack()
+leaderboard = Button(road, text="Leaderboard", font=("arial", 25))
+leaderboard.configure(width = 10, relief = FLAT)
+road.create_window(800, 450, window=leaderboard)
+
+controls = Button(road, text="Controls", font=("arial", 25))
+controls.configure(width = 10, relief = FLAT)
+road.create_window(800, 550, window=controls)
+
+quit = Button(road, text="Quit", font=("arial", 25), command=QuitButton)
+quit.configure(width = 10, relief = FLAT)
+road.create_window(800, 650, window=quit)	
+
+#-----------------
 
 
 
-#mainMenu()
 
 root.mainloop()
