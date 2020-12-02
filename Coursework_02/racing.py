@@ -1,5 +1,6 @@
 from tkinter import *
 from time import *
+from random import *
 
 def MainMenu():
 	global Welcome, play, leaderboard, controls, quit
@@ -101,24 +102,95 @@ def Game(car):
 	y=0
 	sizex=30
 	sizey=100
+	carOnScreen=False
+	carOnScreen2=False
+	carOnScreen3=False
+
 	for i in range (4):
 		for j in range(5):
 			lane.append(road.create_rectangle(x, y, x+sizex, y+sizey, fill="white"))
 			y += 200
 		x += 314
 		y = 0
+
 	road.create_rectangle(0,0,30,900,fill="white")
 	road.create_rectangle(1570,0,1600,900,fill="white")
 	
 	while True:
-
-
 		for i in range(len(lane)):
 			pos = road.coords(lane[i])
 			if pos[1] > 900:
-				road.coords(lane[i], pos[0], -100, pos[2], 0)
+				road.coords(lane[i], pos[0], -100, pos[2], 0)				#teleports lane up
 			road.move(lane[i],0,1)
-		sleep (0.0005)
+		sleep (0.001)
+		
+		if (carOnScreen == False):
+			laneCar = randint(0,4)
+			colourCar = randint(1,4)
+			if (colourCar == 1):
+				obstaclePNG = PhotoImage(file="car_green.png")
+			elif (colourCar == 2):
+				obstaclePNG = PhotoImage(file="car_orange.png")
+			elif (colourCar == 3):
+				obstaclePNG = PhotoImage(file="car_purple.png")
+			else:
+				obstaclePNG = PhotoImage(file="car_red.png")
+			obstaclePhoto = road.create_image(172 + 314 * laneCar, 100, image=obstaclePNG)	
+			carOnScreen = True
+		else:
+			obstaclePos = road.coords(obstaclePhoto)
+			if (obstaclePos[1] < 900):
+				road.move(obstaclePhoto,0,2)
+			else:
+				carOnScreen = False
+			sleep(0.001)	
+
+		#-----car #2 -----
+
+		if (carOnScreen2 == False):		
+			laneCar = randint(0,4)
+			colourCar = randint(1,4)
+			if (colourCar == 1):
+				obstaclePNG2 = PhotoImage(file="car_green.png")
+			elif (colourCar == 2):
+				obstaclePNG2 = PhotoImage(file="car_orange.png")
+			elif (colourCar == 3):
+				obstaclePNG2 = PhotoImage(file="car_purple.png")
+			else:
+				obstaclePNG2 = PhotoImage(file="car_red.png")
+			obstaclePhoto2 = road.create_image(172 + 314 * laneCar, 100, image=obstaclePNG2)
+
+			carOnScreen2 = True
+		else:
+			obstaclePos2 = road.coords(obstaclePhoto2)
+			if (obstaclePos2[1] < 900):
+				road.move(obstaclePhoto2,0,2)
+			else:
+				carOnScreen2 = False
+
+		#------ car #3 ------
+		
+		if (carOnScreen3 == False):		
+			laneCar = randint(0,4)
+			colourCar = randint(1,4)
+			if (colourCar == 1):
+				obstaclePNG3 = PhotoImage(file="car_green.png")
+			elif (colourCar == 2):
+				obstaclePNG3 = PhotoImage(file="car_orange.png")
+			elif (colourCar == 3):
+				obstaclePNG3 = PhotoImage(file="car_purple.png")
+			else:
+				obstaclePNG3 = PhotoImage(file="car_red.png")
+			obstaclePhoto3 = road.create_image(172 + 314 * laneCar, 100, image=obstaclePNG3)
+
+			carOnScreen3 = True
+		else:
+			obstaclePos3 = road.coords(obstaclePhoto3)
+			if (obstaclePos3[1] < 900):
+				road.move(obstaclePhoto3,0,2)
+			else:
+				carOnScreen3 = False
+
 		road.update()
 
 
