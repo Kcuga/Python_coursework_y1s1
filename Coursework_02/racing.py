@@ -77,6 +77,19 @@ def Game(car):
 			road.move(carPhoto,314,0)
 			carPos = road.coords(carPhoto)
 
+	def collisionDetection():
+		playerBbox = road.bbox(carPhoto)
+		car1Bbox = road.bbox(obstaclePhoto)
+		car2Bbox = road.bbox(obstaclePhoto2)
+		car3Bbox = road.bbox(obstaclePhoto3)
+		if( (playerBbox[0] < car1Bbox[2] and playerBbox[2] > car1Bbox[1] and
+			playerBbox[1] < car1Bbox[3] and playerBbox[3] > car1Bbox[1]) or
+			(playerBbox[0] < car2Bbox[2] and playerBbox[2] > car2Bbox[1] and
+			playerBbox[1] < car2Bbox[3] and playerBbox[3] > car2Bbox[1]) or
+			(playerBbox[0] < car3Bbox[2] and playerBbox[2] > car3Bbox[1] and
+			playerBbox[1] < car3Bbox[3] and playerBbox[3] > car3Bbox[1]) ):
+			root.destroy()
+
 	global carPhoto
 
 	if (car == "green"):
@@ -95,7 +108,7 @@ def Game(car):
 
 	carPhoto = road.create_image(800,795, image=carPNG)
 	root.bind("<Left>", left)
-	root.bind("<Right>", right)
+	root.bind("<Right>", right)	
 
 	lane = []
 	x=314
@@ -191,6 +204,9 @@ def Game(car):
 			else:
 				carOnScreen3 = False
 
+		collisionDetection()
+		#implement score
+
 		road.update()
 
 
@@ -202,8 +218,6 @@ road = Canvas(root, width=1600, height=900)
 road.pack()
 
 road.config(bg="Black")
-
-
 
 MainMenu()
 
