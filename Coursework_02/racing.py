@@ -21,7 +21,14 @@ def MainMenu():
 
 	quit = Button(road, text="Quit", font=("arial", 25), command=QuitButton)
 	quit.configure(width = 10, relief = FLAT)
-	road.create_window(800, 650, window=quit)	
+	road.create_window(800, 650, window=quit)
+
+def MainMenuEnd():
+	backMenu, finalScore, nameTxt, nameEntry
+	road.delete(finalScore,nameTxt)
+	nameEntry.destroy()
+	backMenu.destroy()
+	MainMenu()	
 
 def PlayButton():
 	road.delete(Welcome)
@@ -88,15 +95,9 @@ def Game(car):
 			playerBbox[1] < car2Bbox[3] and playerBbox[3] > car2Bbox[1]) or
 			(playerBbox[0] < car3Bbox[2] and playerBbox[2] > car3Bbox[0] and
 			playerBbox[1] < car3Bbox[3] and playerBbox[3] > car3Bbox[1]) ):
-			#gameOver()
-			root.destroy()
+			gameOver()
 
-	def changeScore(score):
-		#global scoreTxt
-		Score = score + 10
-		
-
-	global carPhoto, scoreTxt
+	global carPhoto, scoreTxt, lane, obstaclePhoto, obstaclePhoto2, obstaclePhoto3, score
 
 	if (car == "green"):
 		carPNG = PhotoImage(file="car_green.png")
@@ -136,7 +137,7 @@ def Game(car):
 	road.create_rectangle(1570,0,1600,900,fill="white")
 
 	score = 0
-	scoreTxt = road.create_text(165,50, fill="white",font=("arial", 35), text=("Score:",score))
+	scoreTxt = road.create_text(170,50, fill="white",font=("arial", 35), text=("Score:",score))
 	
 	while True:
 		for i in range(len(lane)):
@@ -216,14 +217,33 @@ def Game(car):
 				carOnScreen3 = False
 
 		collisionDetection()
+
+		#-----Score-----
+		#
 		if (carOnScreen == False):
 			road.delete(scoreTxt)
-			score = score +1000
-			scoreTxt = road.create_text(165,50, fill="white",font=("arial", 35), text=("Score:",score))
-
-		#implement score
+			score = score +10
+			scoreTxt = road.create_text(170,50, fill="white",font=("arial", 35), text=("Score:",score))
 
 		road.update()
+
+def gameOver():
+
+	global backMenu, finalScore, nameTxt, nameEntry
+
+	for i in range(len(lane)):
+		road.delete(lane[i])
+	road.delete(obstaclePhoto, obstaclePhoto2, obstaclePhoto3, carPhoto, scoreTxt)
+
+	finalScore = road.create_text(800,200, fill="white",font=("arial", 75), text=("Score:",score))
+	nameTxt = road.create_text(700,600, fill="white", font=("arial", 45), text="Name:")
+	nameEntry = Entry(road, bd=0, font=("arial", 45), width=10, bg="Black", fg="white")
+	road.create_window(960,600, window=nameEntry)
+
+	backMenu = Button(road, text="Main Menu", font=("arial", 25), command=MainMenuEnd)
+	backMenu.configure(width = 10, relief = FLAT)
+	road.create_window(800, 700, window=backMenu)
+	
 
 
 root = Tk()  
