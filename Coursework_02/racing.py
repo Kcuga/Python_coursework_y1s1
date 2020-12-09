@@ -82,15 +82,21 @@ def Game(car):
 		car1Bbox = road.bbox(obstaclePhoto)
 		car2Bbox = road.bbox(obstaclePhoto2)
 		car3Bbox = road.bbox(obstaclePhoto3)
-		if( (playerBbox[0] < car1Bbox[2] and playerBbox[2] > car1Bbox[1] and
+		if( (playerBbox[0] < car1Bbox[2] and playerBbox[2] > car1Bbox[0] and
 			playerBbox[1] < car1Bbox[3] and playerBbox[3] > car1Bbox[1]) or
-			(playerBbox[0] < car2Bbox[2] and playerBbox[2] > car2Bbox[1] and
+			(playerBbox[0] < car2Bbox[2] and playerBbox[2] > car2Bbox[0] and
 			playerBbox[1] < car2Bbox[3] and playerBbox[3] > car2Bbox[1]) or
-			(playerBbox[0] < car3Bbox[2] and playerBbox[2] > car3Bbox[1] and
+			(playerBbox[0] < car3Bbox[2] and playerBbox[2] > car3Bbox[0] and
 			playerBbox[1] < car3Bbox[3] and playerBbox[3] > car3Bbox[1]) ):
+			#gameOver()
 			root.destroy()
 
-	global carPhoto
+	def changeScore(score):
+		#global scoreTxt
+		Score = score + 10
+		
+
+	global carPhoto, scoreTxt
 
 	if (car == "green"):
 		carPNG = PhotoImage(file="car_green.png")
@@ -128,6 +134,9 @@ def Game(car):
 
 	road.create_rectangle(0,0,30,900,fill="white")
 	road.create_rectangle(1570,0,1600,900,fill="white")
+
+	score = 0
+	scoreTxt = road.create_text(165,50, fill="white",font=("arial", 35), text=("Score:",score))
 	
 	while True:
 		for i in range(len(lane)):
@@ -136,6 +145,8 @@ def Game(car):
 				road.coords(lane[i], pos[0], -100, pos[2], 0)				#teleports lane up
 			road.move(lane[i],0,1)
 		sleep (0.001)
+
+		#-----car #1------
 		
 		if (carOnScreen == False):
 			laneCar = randint(0,4)
@@ -148,17 +159,17 @@ def Game(car):
 				obstaclePNG = PhotoImage(file="car_purple.png")
 			else:
 				obstaclePNG = PhotoImage(file="car_red.png")
-			obstaclePhoto = road.create_image(172 + 314 * laneCar, 100, image=obstaclePNG)	
+			obstaclePhoto = road.create_image(172 + 314 * laneCar, -75, image=obstaclePNG)	
 			carOnScreen = True
 		else:
 			obstaclePos = road.coords(obstaclePhoto)
-			if (obstaclePos[1] < 900):
-				road.move(obstaclePhoto,0,2)
+			if (obstaclePos[1] < 975):
+				road.move(obstaclePhoto,0,3)
 			else:
 				carOnScreen = False
 			sleep(0.001)	
 
-		#-----car #2 -----
+		#-----car #2-----
 
 		if (carOnScreen2 == False):		
 			laneCar = randint(0,4)
@@ -171,17 +182,17 @@ def Game(car):
 				obstaclePNG2 = PhotoImage(file="car_purple.png")
 			else:
 				obstaclePNG2 = PhotoImage(file="car_red.png")
-			obstaclePhoto2 = road.create_image(172 + 314 * laneCar, 100, image=obstaclePNG2)
+			obstaclePhoto2 = road.create_image(172 + 314 * laneCar, -75, image=obstaclePNG2)
 
 			carOnScreen2 = True
 		else:
 			obstaclePos2 = road.coords(obstaclePhoto2)
-			if (obstaclePos2[1] < 900):
-				road.move(obstaclePhoto2,0,2)
+			if (obstaclePos2[1] < 975):
+				road.move(obstaclePhoto2,0,3)
 			else:
 				carOnScreen2 = False
 
-		#------ car #3 ------
+		#------ car #3------
 		
 		if (carOnScreen3 == False):		
 			laneCar = randint(0,4)
@@ -194,17 +205,22 @@ def Game(car):
 				obstaclePNG3 = PhotoImage(file="car_purple.png")
 			else:
 				obstaclePNG3 = PhotoImage(file="car_red.png")
-			obstaclePhoto3 = road.create_image(172 + 314 * laneCar, 100, image=obstaclePNG3)
+			obstaclePhoto3 = road.create_image(172 + 314 * laneCar, -75, image=obstaclePNG3)
 
 			carOnScreen3 = True
 		else:
 			obstaclePos3 = road.coords(obstaclePhoto3)
-			if (obstaclePos3[1] < 900):
-				road.move(obstaclePhoto3,0,2)
+			if (obstaclePos3[1] < 975):
+				road.move(obstaclePhoto3,0,3)
 			else:
 				carOnScreen3 = False
 
 		collisionDetection()
+		if (carOnScreen == False):
+			road.delete(scoreTxt)
+			score = score +1000
+			scoreTxt = road.create_text(165,50, fill="white",font=("arial", 35), text=("Score:",score))
+
 		#implement score
 
 		road.update()
