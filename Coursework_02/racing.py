@@ -3,7 +3,7 @@ from time import *
 from random import *
 
 def MainMenu():
-	global Welcome, play, leaderboard, controls, quit
+	global Welcome, play, leaderboard, controls, quit, nameScore, topScore
 
 	Welcome = road.create_text(800,150, fill="white",font=("arial", 75), text="Welcome to my game!")
 
@@ -11,7 +11,7 @@ def MainMenu():
 	play.configure(width = 10, relief = FLAT)
 	road.create_window(800, 350, window=play)
 
-	leaderboard = Button(road, text="Leaderboard", font=("arial", 25))
+	leaderboard = Button(road, text="Leaderboard", font=("arial", 25), command=LeaderboardButton)
 	leaderboard.configure(width = 10, relief = FLAT)
 	road.create_window(800, 450, window=leaderboard)
 
@@ -61,7 +61,30 @@ def PlayButton():
 	carRed.image = photoRed
 	carRed_window = road.create_window(1100,630, window=carRed)  
 
-#def LeaderboardButton():
+def LeaderboardButton():
+	global nameScore, topScore, back, top1, top2, top3, leaderboardTxt
+
+	road.delete(Welcome)
+	play.destroy()
+	leaderboard.destroy()
+	controls.destroy()
+	quit.destroy()
+
+	leaderboardTxt = road.create_text(800,200, fill="white",font=("arial", 75), text="Leaderboard")
+
+	top1 = road.create_text(800,400, fill="white",font=("arial", 40), text=(nameScore[0],"---",topScore[0]))
+	top2 = road.create_text(800,500, fill="white",font=("arial", 40), text=(nameScore[1],"---",topScore[1]))
+	top3 = road.create_text(800,600, fill="white",font=("arial", 40), text=(nameScore[2],"---",topScore[2]))
+
+	back = Button(road, text="Back", font=("arial", 25), command=leaderboard_to_mainmenu)
+	back.configure(width = 10, relief = FLAT)
+	road.create_window(800, 800, window=back)
+
+	
+def leaderboard_to_mainmenu():
+	road.delete(top1,top2,top3, leaderboardTxt)
+	back.destroy()
+	MainMenu()
 
 #def ControlsButton():
 
@@ -71,6 +94,22 @@ def QuitButton():
 
 
 def Game(car):
+
+	def is_paused(event):
+		control = 0
+
+	def is_continued(event):
+		control = 1
+
+	def controler():
+		if not control:
+			sleep(0.2)
+			controler()
+		else:
+			pass
+	def cheat(event):
+		global score
+		score += 100
 
 	def left(event):
 		carPos = road.coords(carPhoto)
@@ -95,9 +134,10 @@ def Game(car):
 			playerBbox[1] < car2Bbox[3] and playerBbox[3] > car2Bbox[1]) or
 			(playerBbox[0] < car3Bbox[2] and playerBbox[2] > car3Bbox[0] and
 			playerBbox[1] < car3Bbox[3] and playerBbox[3] > car3Bbox[1]) ):
+			root.unbind("<c>")
 			gameOver()
 
-	global carPhoto, scoreTxt, lane, obstaclePhoto, obstaclePhoto2, obstaclePhoto3, score
+	global carPhoto, scoreTxt, lane, obstaclePhoto, obstaclePhoto2, obstaclePhoto3, score, control, nameScore, topScore
 
 	if (car == "green"):
 		carPNG = PhotoImage(file="car_green.png")
@@ -115,7 +155,10 @@ def Game(car):
 
 	carPhoto = road.create_image(800,795, image=carPNG)
 	root.bind("<Left>", left)
-	root.bind("<Right>", right)	
+	root.bind("<Right>", right)
+	root.bind("<Escape>", is_paused)
+	root.bind("<Enter>", is_continued)
+	root.bind("<c>", cheat)	
 
 	lane = []
 	x=314
@@ -125,6 +168,8 @@ def Game(car):
 	carOnScreen=False
 	carOnScreen2=False
 	carOnScreen3=False
+	control = 1
+	
 
 	for i in range (4):
 		for j in range(5):
@@ -219,17 +264,19 @@ def Game(car):
 		collisionDetection()
 
 		#-----Score-----
-		#
+		
 		if (carOnScreen == False):
 			road.delete(scoreTxt)
 			score = score +10
 			scoreTxt = road.create_text(170,50, fill="white",font=("arial", 35), text=("Score:",score))
 
+		controler()
+
 		road.update()
 
 def gameOver():
 
-	global backMenu, finalScore, nameTxt, nameEntry
+	global backMenu, finalScore, nameTxt, nameEntry, nameScore, topScore
 
 	for i in range(len(lane)):
 		road.delete(lane[i])
@@ -240,9 +287,25 @@ def gameOver():
 	nameEntry = Entry(road, bd=0, font=("arial", 45), width=10, bg="Black", fg="white")
 	road.create_window(960,600, window=nameEntry)
 
-	backMenu = Button(road, text="Main Menu", font=("arial", 25), command=MainMenuEnd)
+	
+
+	backMenu = Button(road, text="Main Menu", font=("arial", 25), command=leaderboardStore)
 	backMenu.configure(width = 10, relief = FLAT)
 	road.create_window(800, 700, window=backMenu)
+
+def leaderboardStore():
+	global topScore, nameScore
+
+	i=0
+	for i in range(3):
+		if (score > topScore[i]):
+			for j in range(2, i, -1):
+				topScore[j] = topScore[j-1]
+				nameScore[j] = nameScore[j-1]
+			topScore[i] = score
+			nameScore[i] = nameEntry.get()
+			break
+	MainMenuEnd()
 	
 
 
@@ -254,6 +317,9 @@ road = Canvas(root, width=1600, height=900)
 road.pack()
 
 road.config(bg="Black")
+
+topScore = [0,0,0,0,0,0,0,0,0,0]
+nameScore=["no_name", "no_name", "no_name", "no_name", "no_name", "no_name", "no_name", "no_name", "no_name", "no_name"]
 
 MainMenu()
 
