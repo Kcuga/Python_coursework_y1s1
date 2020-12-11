@@ -211,6 +211,8 @@ def Game(car):
 
 	speed = 2							#| Variables for car speed
 	scoreThreshold = 90					#|
+
+	control = 1
 	
 	#---Background lanes loop---
 
